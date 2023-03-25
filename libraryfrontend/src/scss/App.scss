@@ -1,0 +1,60 @@
+.available-books-list-container, .my-book-list-container {
+    padding-bottom: 30px;
+
+    .book-list-text {
+        text-align: center;
+        margin-top: 0px;
+        padding-top: 30px;
+    }
+
+    .book-count-text {
+        padding-top: 30px;
+        text-align: center;
+    }
+}
+
+hr {
+    border-color: lightgray !important;
+}
+
+.library-background {
+    background-image: url('../images/books.png');
+    padding: 40px;
+}
+
+.login-container {
+    margin-top: 60px;
+
+    .toggle-login-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+
+        .toggle-login-button {
+            margin-top: 5px;
+            text-transform: none;
+            background-color: white !important;
+            color: black !important;
+            font-size: 1.1rem;
+        }
+    }
+
+    button {
+        background-color: #E77436 !important;
+    }
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+
+    .MuiInputBase-root {
+        margin-bottom: 10px !important;
+    }
+
+    button {
+        background-color: #E77436 !important;
+    }
+}

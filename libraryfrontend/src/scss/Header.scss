@@ -1,0 +1,30 @@
+.header-section {
+    display: flex;
+
+    .header-text-container {
+        display: flex;
+        flex-direction: row;
+        font-weight: bold;
+        align-items: center;
+
+        .header-title {
+            font-weight: 500 !important;
+        }
+
+        .header-book-logo {
+            font-size: 5rem;
+            padding-left: 10px;
+            padding-right: 10px;
+            color: #E77436;
+        }
+    }
+
+    .header-action-buttons {
+        display: flex;
+        justify-content: end;
+    }
+
+    button {
+        background-color: #E77436 !important;
+    }
+}

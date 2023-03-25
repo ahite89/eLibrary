@@ -1,0 +1,25 @@
+.my-book-show {
+    padding: 7px;
+    margin: 20px 5px 20px 5px;
+    align-self: center;
+
+    .my-book-contents {
+        display: flex;
+        flex-direction: row;
+
+        .my-book-cover {
+            width: 25px;
+            height: auto;
+        }
+
+        .my-book-info {
+            display: flex;
+            flex-direction: column;
+            margin-left: 10px !important;
+
+            .my-book-title {
+                font-weight: 600 !important;
+            }
+        }
+    }
+}

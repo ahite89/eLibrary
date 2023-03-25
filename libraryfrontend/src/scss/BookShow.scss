@@ -1,0 +1,75 @@
+.book-show {
+    border: 1px solid #dadada;
+    background-color: white;
+    padding: 15px;
+    margin: 20px;
+    align-self: center;
+
+    .book-contents-container {
+        display: flex;
+        flex-direction: row;
+
+        .book-cover {
+            width: 150px;
+        }
+
+        .book-contents {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin-left: 15px;
+
+            .book-description {
+                background-color: #f1f1f1;
+                padding: 10px;
+                margin: 10px 0 10px 0;
+            }
+
+            .book-year {
+                color: #666;
+            }
+
+            .book-title-actions-container {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+
+                .book-title {
+                    font-weight: 500 !important;
+                }
+
+                .book-actions {
+                    margin-left: 15px;
+
+                    .delete-icon, .toggle-edit-icon {
+                        cursor: pointer;
+                        font-size: 2rem;
+                    }
+
+                    .delete-icon {
+                        margin-left: 10px;
+                    }
+                }
+            }
+
+            .check-status-container {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                margin-top: 15px;
+
+                .check-status-toggle-button {
+                    color: white;
+                    font-size: 1.25rem !important;
+                    border-radius: 0 !important;
+                    text-transform: none !important;
+                }
+
+                .availability-text {
+                    font-weight: 500 !important;
+                    align-self: center;
+                }
+            }
+        }
+    }
+}
