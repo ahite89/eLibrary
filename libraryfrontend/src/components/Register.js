@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { Button, Card, TextField, MenuItem } from '@mui/material';
 import agent from '../api/agent';
 
-function Register({ assignRole, onLogin }) {
+function Register({ onLogin }) {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -28,8 +28,7 @@ function Register({ assignRole, onLogin }) {
         };
 
         agent.Account.register(registerData).then((userData) => {
-            assignRole(userData.Role);
-            onLogin();
+            onLogin(userData);
         })
     };
 

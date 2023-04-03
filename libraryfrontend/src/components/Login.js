@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Button, Card, TextField } from '@mui/material';
 import agent from '../api/agent';
 
-function Login({ assignRole, onLogin }) {
+function Login({ onLogin }) {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -18,9 +18,8 @@ function Login({ assignRole, onLogin }) {
         };
 
         agent.Account.login(loginData).then((userData) => {
-            assignRole(userData.role);
-            onLogin();
-        })        
+            onLogin(userData);
+        });
     };
 
     return (

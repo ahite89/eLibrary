@@ -1,5 +1,6 @@
 ﻿using LibraryBackEnd.Models;
 using Microsoft.AspNetCore.Identity;
+using static System.Reflection.Metadata.BlobBuilder;
 
 namespace LibraryBackEnd.Data
 {
@@ -23,6 +24,27 @@ namespace LibraryBackEnd.Data
                 }
             }
 
+            //if (!context.Photos.Any())
+            //{
+            //    var bookCovers = new List<Photo>
+            //    {
+            //        new Photo { Id = "The_Great_Gatsby_fce787", Url = "https://res.cloudinary.com/deegwzaxk/image/upload/v1679275818/The_Great_Gatsby_fce787.jpg" },
+            //        new Photo { Id = "Animal_Farm_jcem3h", Url = "https://res.cloudinary.com/deegwzaxk/image/upload/v1679275817/Animal_Farm_jcem3h.jpg" },
+            //        new Photo { Id = "Harry_Potter_and_the_Philosopher_s_Stone_g00shi", Url = "https://res.cloudinary.com/deegwzaxk/image/upload/v1679275818/Harry_Potter_and_the_Philosopher_s_Stone_g00shi.jpg" },
+            //        new Photo { Id = "Jurassic_park_w9f11f", Url = "https://res.cloudinary.com/deegwzaxk/image/upload/v1679275818/Jurassic_park_w9f11f.jpg" },
+            //        new Photo { Id = "The_Grapes_of_Wrath_yxfd6r", Url = "https://res.cloudinary.com/deegwzaxk/image/upload/v1679275818/The_Grapes_of_Wrath_yxfd6r.jpg" },
+            //        new Photo { Id = "Beloved_ww2gzk", Url = "https://res.cloudinary.com/deegwzaxk/image/upload/v1679275818/Beloved_ww2gzk.jpg" },
+            //        new Photo { Id = "Everything_Is_Illuminated_dree98", Url = "https://res.cloudinary.com/deegwzaxk/image/upload/v1679275817/Everything_Is_Illuminated_dree98.jpg" },
+            //        new Photo { Id = "Breakfast_Of_Champions_hzdbdw", Url = "https://res.cloudinary.com/deegwzaxk/image/upload/v1679275818/Breakfast_Of_Champions_hzdbdw.jpg" },
+            //        new Photo { Id = "Watership_Down_j8tbod", Url = "https://res.cloudinary.com/deegwzaxk/image/upload/v1679275818/Watership_Down_j8tbod.jpg" },
+            //        new Photo { Id = "The_Joy_Luck_Club_aermat", Url = "https://res.cloudinary.com/deegwzaxk/image/upload/v1679275818/The_Joy_Luck_Club_aermat.jpg" },
+            //        new Photo { Id = "Something_wicked_this_way_comes_jgfqsu", Url = "https://res.cloudinary.com/deegwzaxk/image/upload/v1679275818/Something_wicked_this_way_comes_jgfqsu.jpg" }
+            //    };
+
+            //    await context.Photos.AddRangeAsync(bookCovers);
+            //    await context.SaveChangesAsync();
+            //}
+
             if (!context.Books.Any())
             {
                 var books = new List<Book>
@@ -38,8 +60,7 @@ namespace LibraryBackEnd.Data
                         CheckedOutBy = null,
                         DateAdded = DateTime.Now,
                         AddedBy = new Guid("5bc832ad-e995-49dd-a5ba-80c72bfe0090"),
-                        BookCoverUrl = "",
-                        BookCover = new BookCover { Id = "", Url = "" }
+                        BookCoverUrl = "https://res.cloudinary.com/deegwzaxk/image/upload/v1679275818/The_Great_Gatsby_fce787.jpg"
                     },
                     new Book
                     {
@@ -52,8 +73,7 @@ namespace LibraryBackEnd.Data
                         CheckedOutBy = null,
                         DateAdded = DateTime.Now,
                         AddedBy = new Guid("5bc832ad-e995-49dd-a5ba-80c72bfe0090"),
-                        BookCoverUrl = "",
-                        BookCover = new BookCover { Id = "", Url = "" }
+                        BookCoverUrl = "https://res.cloudinary.com/deegwzaxk/image/upload/v1679275817/Animal_Farm_jcem3h.jpg"
                     },
                     new Book
                     {
@@ -66,8 +86,7 @@ namespace LibraryBackEnd.Data
                         CheckedOutBy = null,
                         DateAdded = DateTime.Now,
                         AddedBy = new Guid("5bc832ad-e995-49dd-a5ba-80c72bfe0090"),
-                        BookCoverUrl = "",
-                        BookCover = new BookCover { Id = "", Url = "" }
+                        BookCoverUrl = "https://res.cloudinary.com/deegwzaxk/image/upload/v1679275818/Harry_Potter_and_the_Philosopher_s_Stone_g00shi.jpg"
                     },
                     new Book
                     {
@@ -80,8 +99,7 @@ namespace LibraryBackEnd.Data
                         CheckedOutBy = null,
                         DateAdded = DateTime.Now,
                         AddedBy = new Guid("5bc832ad-e995-49dd-a5ba-80c72bfe0090"),
-                        BookCoverUrl = "",
-                        BookCover = new BookCover { Id = "", Url = "" }
+                        BookCoverUrl = "https://res.cloudinary.com/deegwzaxk/image/upload/v1679275818/Jurassic_park_w9f11f.jpg"
                     },
                     new Book
                     {
@@ -94,8 +112,7 @@ namespace LibraryBackEnd.Data
                         CheckedOutBy = null,
                         DateAdded = DateTime.Now,
                         AddedBy = new Guid("5bc832ad-e995-49dd-a5ba-80c72bfe0090"),
-                        BookCoverUrl = "",
-                        BookCover = new BookCover { Id = "", Url = "" }
+                        BookCoverUrl = "https://res.cloudinary.com/deegwzaxk/image/upload/v1679275818/The_Grapes_of_Wrath_yxfd6r.jpg"
                     },
                     new Book 
                     {
@@ -108,8 +125,7 @@ namespace LibraryBackEnd.Data
                         CheckedOutBy = null,
                         DateAdded = DateTime.Now,
                         AddedBy = new Guid("69d24a5c-2f0b-4e20-aee3-97401b15a918"),
-                        BookCoverUrl = "",
-                        BookCover = new BookCover { Id = "", Url = "" }
+                        BookCoverUrl = "https://res.cloudinary.com/deegwzaxk/image/upload/v1679275818/Beloved_ww2gzk.jpg"
                     },
                     new Book
                     {
@@ -122,8 +138,7 @@ namespace LibraryBackEnd.Data
                         CheckedOutBy = null,
                         DateAdded = DateTime.Now,
                         AddedBy = new Guid("69d24a5c-2f0b-4e20-aee3-97401b15a918"),
-                        BookCoverUrl = "",
-                        BookCover = new BookCover { Id = "", Url = "" }
+                        BookCoverUrl = "https://res.cloudinary.com/deegwzaxk/image/upload/v1679275817/Everything_Is_Illuminated_dree98.jpg"
                     },
                     new Book
                     {
@@ -136,8 +151,7 @@ namespace LibraryBackEnd.Data
                         CheckedOutBy = null,
                         DateAdded = DateTime.Now,
                         AddedBy = new Guid("69d24a5c-2f0b-4e20-aee3-97401b15a918"),
-                        BookCoverUrl = "",
-                        BookCover = new BookCover { Id = "", Url = "" }
+                        BookCoverUrl = "https://res.cloudinary.com/deegwzaxk/image/upload/v1679275818/Breakfast_Of_Champions_hzdbdw.jpg"
                     },
                     new Book
                     {
@@ -150,8 +164,7 @@ namespace LibraryBackEnd.Data
                         CheckedOutBy = null,
                         DateAdded = DateTime.Now,
                         AddedBy = new Guid("69d24a5c-2f0b-4e20-aee3-97401b15a918"),
-                        BookCoverUrl = "",
-                        BookCover = new BookCover { Id = "", Url = "" }
+                        BookCoverUrl = "https://res.cloudinary.com/deegwzaxk/image/upload/v1679275818/Watership_Down_j8tbod.jpg"
                     },
                     new Book
                     {
@@ -164,8 +177,7 @@ namespace LibraryBackEnd.Data
                         CheckedOutBy = null,
                         DateAdded = DateTime.Now,
                         AddedBy = new Guid("69d24a5c-2f0b-4e20-aee3-97401b15a918"),
-                        BookCoverUrl = "",
-                        BookCover = new BookCover { Id = "", Url = "" }
+                        BookCoverUrl = "https://res.cloudinary.com/deegwzaxk/image/upload/v1679275818/The_Joy_Luck_Club_aermat.jpg"
                     },
                     new Book
                     {
@@ -178,8 +190,7 @@ namespace LibraryBackEnd.Data
                         CheckedOutBy = null,
                         DateAdded = DateTime.Now,
                         AddedBy = new Guid("69d24a5c-2f0b-4e20-aee3-97401b15a918"),
-                        BookCoverUrl = "",
-                        BookCover = new BookCover { Id = "", Url = "" }
+                        BookCoverUrl = "https://res.cloudinary.com/deegwzaxk/image/upload/v1679275818/Something_wicked_this_way_comes_jgfqsu.jpg"
                     }
                 };
 

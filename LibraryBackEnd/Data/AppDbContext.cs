@@ -9,6 +9,6 @@ namespace LibraryBackEnd.Data
         public AppDbContext(DbContextOptions options) : base(options) { }
 
         public DbSet<Book> Books { get; set; }
-        public DbSet<BookCover> BookCovers { get; set; }
+        public DbSet<Photo> Photos { get; set; }
     }
 }

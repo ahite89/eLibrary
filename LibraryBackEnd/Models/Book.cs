@@ -22,7 +22,7 @@ namespace LibraryBackEnd.Models
         public Guid? CheckedOutBy { get; set; }
         public DateTime DateAdded { get; set; }
         public Guid AddedBy { get; set; }
-        public BookCover? BookCover { get; set; }
+        public Photo? BookCover { get; set; }
         public string? BookCoverUrl { get; set; }
     }
 }

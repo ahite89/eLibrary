@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using LibraryBackEnd.Interfaces;
 using LibraryBackEnd.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using LibraryBackEnd.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryBackEnd.Controllers
 {
@@ -23,7 +23,7 @@ namespace LibraryBackEnd.Controllers
         }
 
         [HttpGet]
-        //[Authorize(Roles = "User, Librarian")]
+        [Authorize(Roles = "user, librarian")]
         public async Task<ActionResult<List<Book>>> GetAllBooks()
         {
             List<Book> books = await _libraryService.GetAllBooksAsync();
@@ -36,39 +36,31 @@ namespace LibraryBackEnd.Controllers
             return books;
         }
 
-        [HttpGet("{id}")]
-        //[Authorize(Roles = "User, Librarian")]
-        public async Task<ActionResult<Book>> GetBook(Guid id)
-        {
-            Book book = await _libraryService.GetBookAsync(id);
-
-            if (book == null)
-            {
-                return StatusCode(StatusCodes.Status204NoContent, $"No book found for id: {id}");
-            }
-
-            return book;
-        }
-
         [HttpPost("create")]
-        //[Authorize(Roles = "Librarian")]
-        public async Task<ActionResult<Book>> AddBook([FromForm] CreateBookModel formData)
+        [Authorize(Roles = "librarian")]
+        public async Task<ActionResult<Book>> AddBook([FromForm] CreateEditBookModel bookData)
         {
-            string email = "ahite89@gmail.com";
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByNameAsync(bookData.Username);
 
-            var bookCover = await _bookCoverService.AddBookCoverEntity(formData.BookCoverFile);
+            if (user == null) return Unauthorized();
+
+            var bookCover = new Photo();
+
+            if (bookData.BookCoverFile != null)
+            {
+                bookCover = await _bookCoverService.AddBookCoverEntity(bookData.BookCoverFile);
+            }
 
             var newBook = new Book
             {
-                Title = formData.Title,
-                Author = formData.Author,
-                Description = formData.Description,
-                Year = formData.Year,
+                Title = bookData.Title,
+                Author = bookData.Author,
+                Description = bookData.Description,
+                Year = bookData.Year,
                 AddedBy = Guid.Parse(user.Id),
                 DateAdded = DateTime.Now,
-                BookCover = bookCover,
-                BookCoverUrl = bookCover.Url
+                BookCover = bookCover ?? null,
+                BookCoverUrl = bookCover == null ? null : bookCover.Url
             };
 
             Book dbBook = await _libraryService.AddBookAsync(newBook);
@@ -82,58 +74,70 @@ namespace LibraryBackEnd.Controllers
         }
 
         [HttpPost("edit")]
-        //[Authorize(Roles = "Librarian")]
-        public async Task<ActionResult<Book>> EditBook(Book book)
+        [Authorize(Roles = "librarian")]
+        public async Task<ActionResult<Book>> EditBook([FromForm] CreateEditBookModel bookData)
         {
-            Book dbBook = await _libraryService.EditBookAsync(book);
+            // DEAL WITH CLOUDINARY STUFF
+
+            // take in createeditbook model
+            // use bookcover file to see if image exists in cloudinary
+            // if so, don't include it
+            // otherwise, use book cover service
+
+            var bookCover = new Photo();
+
+            if (bookData.BookCoverFile != null)
+            {
+                bookCover = _bookCoverService.GetBookCoverFromCloudinary(bookData.BookCoverFile);
+            }
+
+            Book dbBook = await _libraryService.EditBookAsync(bookData);
 
             if (dbBook == null)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"{book.Title} could not be edited");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{bookData.Title} could not be edited");
             }
 
-            return book;
+            return dbBook;
         }
 
         [HttpPost("checkout")]
-        //[Authorize(Roles = "User")]
+        [Authorize(Roles = "user")]
         public async Task<ActionResult<Book>> CheckoutBook(Book book)
         {
-            string email = "zhite89@gmail.com";
-            var user = await _userManager.FindByEmailAsync(email);
+            // CREATE CHECKIN/OUT MODEL TO DEAL WITH USERNAME
 
-            book.CheckedOutBy = Guid.Parse(user.Id);
-            book.CheckedOut = true;
+            string username = "zhite89";
+            var user = await _userManager.FindByNameAsync(username);
 
-            Book dbBook = await _libraryService.EditBookAsync(book);
+            if (user == null) return Unauthorized();
+
+            Book dbBook = await _libraryService.CheckInOutBookAsync(book, true, user.Id);
 
             if (dbBook == null)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"{book.Title} could not be checked out");
             }
 
-            return book;
+            return dbBook;
         }
 
         [HttpPost("checkin")]
-        //[Authorize(Roles = "Librarian")]
+        [Authorize(Roles = "librarian")]
         public async Task<ActionResult<Book>> CheckinBook(Book book)
         {
-            book.CheckedOutBy = null;
-            book.CheckedOut = false;
-
-            Book dbBook = await _libraryService.EditBookAsync(book);
+            Book dbBook = await _libraryService.CheckInOutBookAsync(book, false);
 
             if (dbBook == null)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"{book.Title} could not be checked in");
             }
 
-            return book;
+            return dbBook;
         }
 
         [HttpPost("delete")]
-        //[Authorize(Roles = "Librarian")]
+        [Authorize(Roles = "librarian")]
         public async Task<ActionResult<Book>> DeleteBook(Book book)
         {
             (bool status, string message) = await _libraryService.DeleteBookAsync(book);

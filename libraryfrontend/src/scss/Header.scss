@@ -25,6 +25,15 @@
     }
 
     button {
-        background-color: #E77436 !important;
+        text-transform: none;
+        font-size: 1.25rem;
+        color: #E77436;
+        border-color: #E77436;
+    }
+
+    button:hover {
+        color: white;
+        background-color: #E77436;
+        border-color: #E77436;
     }
 }

@@ -1,30 +1,58 @@
 import './scss/App.scss';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Typography, Button } from '@mui/material';
 
 import Login from './components/Login';
 import Register from './components/Register';
 import Header from './components/Header';
 import Library from './components/Library';
+import agent from './api/agent';
 
 function App() {
 
     // Login, Register, Role
     const [loggedIn, setLoggedIn] = useState(false);
-    const [userRole, setUserRole] = useState('');
+    const [userData, setUserData] = useState([]);               // change to set user data
     const [hasAccount, setHasAccount] = useState(true);
 
-    const assignUserRole = (role) => {
-        setUserRole(role);
+    // Get current user via local storage
+    useEffect(() => {
+        const userData = localStorage.getItem("userData");
+        if (userData !== null) {
+            agent.Account.current(JSON.parse(userData)).then(userData => {
+                if (userData !== null) {
+                    setLoggedIn(true);
+                    setUserData(userData);
+                }
+            })
+        }
+    }, []);
+
+    const handleLogin = (userData) => {
+        if (userData !== null) {
+            setUserData(userData);
+            setLoggedIn(true);
+            localStorage.setItem("userData", JSON.stringify(userData));
+        }
+    };
+
+    const handleLogout = () => {
+        setLoggedIn(false);
+        setUserData([]);
+        localStorage.removeItem("userData");
     };
 
     return (
         <>
-            <Header setLoggedIn={setLoggedIn} loggedIn={loggedIn} />
+            <Header
+                handleLogout={handleLogout}
+                loggedIn={loggedIn}
+                userData={userData}
+            />
             <div className="library-background"></div>
             {!loggedIn && hasAccount &&
                 <div className='login-container col-md-4 col-md-offset-4'>
-                    <Login assignRole={assignUserRole} onLogin={() => setLoggedIn(true)} />
+                    <Login onLogin={handleLogin} />
                     <div className="toggle-login-container">
                         <Typography variant="h6">Don't have an account?</Typography>
                         <Button className="toggle-login-button" variant="outlined"
@@ -34,7 +62,7 @@ function App() {
             }
             {!loggedIn && !hasAccount &&
                 <div className='login-container col-md-4 col-md-offset-4'>
-                    <Register assignRole={assignUserRole} onLogin={() => setLoggedIn(true)} />
+                    <Register onLogin={handleLogin} />
                     <div className="toggle-login-container">
                         <Typography variant="h6">Already have an account?</Typography>
                         <Button className="toggle-login-button" variant="outlined"
@@ -43,7 +71,7 @@ function App() {
                 </div>
             }
             {loggedIn &&
-                <Library userRole={userRole} />
+                <Library userData={userData} />
             }
         </>
     );

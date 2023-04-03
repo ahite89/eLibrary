@@ -27,18 +27,6 @@ namespace LibraryBackEnd.Services
             }
         }
 
-        public async Task<Book> GetBookAsync(Guid id)
-        {
-            try
-            {
-                return await _dbContext.Books.FindAsync(id);
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
         public async Task<Book> AddBookAsync(Book book)
         {
             try
@@ -53,18 +41,51 @@ namespace LibraryBackEnd.Services
             }
         }
 
-        public async Task<Book> EditBookAsync(Book book)
+        public async Task<Book> EditBookAsync(CreateEditBookModel bookData)
+        {
+            try
+            {
+                var dbBook = await _dbContext.Books.FindAsync(bookData.Id);
+
+                if (dbBook != null)
+                {
+                    dbBook.Title = bookData.Title;
+                    dbBook.Author = bookData.Author;
+                    dbBook.Description = bookData.Description;
+                    dbBook.Year = bookData.Year;
+                    _dbContext.Entry(dbBook).State = EntityState.Modified;
+                    await _dbContext.SaveChangesAsync();
+
+                    return dbBook;
+                }
+
+                return null;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<Book> CheckInOutBookAsync(Book book, bool checkingOut, string userId)
         {
             try
             {
                 var dbBook = await _dbContext.Books.FindAsync(book.Id);
 
-                if (dbBook != null) 
+                if (dbBook != null)
                 {
-                    dbBook.Title = book.Title;
-                    dbBook.Author = book.Author;
-                    dbBook.Description = book.Description;
-                    dbBook.Year = book.Year;
+                    if (checkingOut)
+                    {
+                        dbBook.CheckedOutBy = Guid.Parse(userId);
+                        dbBook.CheckedOut = true;
+                    }
+                    else
+                    {
+                        dbBook.CheckedOutBy = null;
+                        dbBook.CheckedOut = false;
+                    }
+
                     _dbContext.Entry(dbBook).State = EntityState.Modified;
                     await _dbContext.SaveChangesAsync();
 

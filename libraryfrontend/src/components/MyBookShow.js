@@ -6,7 +6,7 @@ function MyBookShow({ book }) {
     return (
         <Card className="my-book-show">
             <div className="my-book-contents">
-                <img className="my-book-cover" src={book.bookImageSrc} />
+                <img className="my-book-cover" src={book.bookCoverUrl || '../images/bookCover.png'} />
                 <div className="my-book-info">
                     <Typography variant="h6" className="my-book-title">{book.title}</Typography>
                     <Typography variant="h6" className="my-book-author">{book.author}</Typography>

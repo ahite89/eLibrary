@@ -1,0 +1,18 @@
+.delete-book-dialog-contents {
+    padding: 5px 20px 20px 20px;
+    
+    .delete-buttons-container {
+        padding-top: 5px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+
+        .delete-book-button {
+            margin-left: 10px;
+        }
+
+        button {
+            width: 100%;
+        }
+    }
+}

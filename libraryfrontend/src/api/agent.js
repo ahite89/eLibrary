@@ -11,26 +11,37 @@ const requests = {
 
 const Library = {
     list: () => requests.get('/library'),
-    create: (book, file) => {
-        let formData = new FormData();
-        console.log(book);
-        formData.append('Title', book.Title);
-        formData.append('Author', book.Author);
-        formData.append('Description', book.Description);
-        formData.append('Year', book.Year);
-        formData.append('BookCoverFile', file);
-        return requests.post('/library/create', formData, {
+    create: (book, file, username) => {
+        let bookData = new FormData();
+        bookData.append('Title', book.Title);
+        bookData.append('Author', book.Author);
+        bookData.append('Description', book.Description);
+        bookData.append('Year', book.Year);
+        bookData.append('BookCoverFile', file);
+        bookData.append('Username', username);
+        return requests.post('/library/create', bookData, {
             headers: {'content-type': 'multipart/form-data'}
         })
     },
-    update: (book) => requests.post('/library/edit', book),
+    update: (book, file) => {
+        let bookData = new FormData();
+        bookData.append('Id', book.Id);
+        bookData.append('Title', book.Title);
+        bookData.append('Author', book.Author);
+        bookData.append('Description', book.Description);
+        bookData.append('Year', book.Year);
+        bookData.append('BookCoverFile', file);
+        return requests.post('/library/edit', bookData, {
+            headers: { 'content-type': 'multipart/form-data' }
+        })
+    },
     checkout: (book) => requests.post('/library/checkout', book),
     checkin: (book) => requests.post('/library/checkin', book),
     delete: (book) => requests.post('/library/delete', book)
 }
 
 const Account = {
-    current: () => requests.get('/account'),
+    current: (userData) => requests.post('/account/current', userData),
     login: (user) => requests.post('/account/login', user),
     register: (user) => requests.post('/account/register', user)
 }

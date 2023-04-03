@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Button, Box, TextField, DialogTitle } from '@mui/material';
-import PhotoDropzone from './PhotoDropzone';
+import { Box, DialogTitle } from '@mui/material';
+import CreateEditForm from './CreateEditForm';
 
 function BookCreate({ onCreate, onCloseModal }) {
 
@@ -10,64 +10,26 @@ function BookCreate({ onCreate, onCloseModal }) {
     const [year, setYear] = useState('');
     const [bookCoverFile, setBookCoverFile] = useState({});
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-
-        const book = {
-            Title: title,
-            Author: author,
-            Description: description,
-            Year: year
-        };
-
-        onCreate(book, bookCoverFile);
-
-        onCloseModal();
-        setTitle('');
-        setAuthor('');
-        setDescription('');
-        setYear('');
-    };
-
     return (
-        <Box className="create-book-modal">
-            <DialogTitle className="create-book-modal-title">
+        <Box className="create-edit-modal">
+            <DialogTitle className="create-edit-modal-title">
                 Add a book to the Troy Web Library collection
             </DialogTitle>
-            <form className='create-book-form' onSubmit={handleSubmit}>
-                <TextField
-                    required
-                    label='Title'
-                    variant="outlined"
-                    value={title}
-                    onChange={(event) => setTitle(event.target.value)}
-                />
-                <TextField
-                    required
-                    label='Author'
-                    variant="outlined"
-                    value={author}
-                    onChange={(event) => setAuthor(event.target.value)}
-                />
-                <TextField
-                    required
-                    //multiline
-                    rows={10}
-                    label='Description'
-                    variant="outlined"
-                    value={description}
-                    onChange={(event) => setDescription(event.target.value)}
-                />
-                <TextField
-                    required
-                    label="Year"
-                    variant="outlined"
-                    value={year}
-                    onChange={(event) => setYear(event.target.value)}
-                />
-                <PhotoDropzone setFile={setBookCoverFile} />
-                <Button variant="contained" type="submit">Add</Button>
-            </form>
+            <CreateEditForm
+                book={null}
+                title={title}
+                setTitle={setTitle}
+                author={author}
+                setAuthor={setAuthor}
+                description={description}
+                setDescription={setDescription}
+                year={year}
+                setYear={setYear}
+                bookCoverFile={bookCoverFile}
+                setBookCoverFile={setBookCoverFile}
+                onCreateEdit={onCreate}
+                onCloseModal={onCloseModal}
+            />
         </Box>
     );
 }

@@ -2,7 +2,7 @@
 
 namespace LibraryBackEnd.Models
 {
-    public class CreateBookModel
+    public class CreateEditBookModel
     {
         [Required]
         public string Title { get; set; }
@@ -16,6 +16,10 @@ namespace LibraryBackEnd.Models
         [Required]
         public string Year { get; set; }
 
+        public Guid? Id { get; set; }
+
         public IFormFile? BookCoverFile { get; set; }
+
+        public string? Username { get; set; }
     }
 }

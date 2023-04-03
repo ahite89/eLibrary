@@ -6,7 +6,7 @@ import MyBookList from './MyBookList';
 import BookCreate from './BookCreate';
 import agent from '../api/agent';
 
-function Library({ userRole }) {
+function Library({ userData }) {
 
     const [books, setBooks] = useState([]);
     const [openCreateModal, setOpenCreateModal] = useState(false);
@@ -18,12 +18,21 @@ function Library({ userRole }) {
         })
     }, []);
 
-    // Create
-    const createBook = async (book, file) => {
+    // Create & Edit
+    const createEditBook = async (book, file) => {
 
-        agent.Library.create(book, file).then((newBook) => {
-            setBooks([...books, newBook]);
-        })
+        // NEED TO ADD USERNAME
+
+        if (book.Id == null) {
+            agent.Library.create(book, file, 'ahite89').then((newBook) => {
+                setBooks([...books, newBook]);
+            })
+        }
+        else {
+            agent.Library.update(book, file).then((updatedBook) => {
+                setBooks([...books.filter(x => x.id !== updatedBook.id), updatedBook]);
+            })
+        }
     };
 
     // Check out & Check in
@@ -49,22 +58,6 @@ function Library({ userRole }) {
         }       
     };
 
-    // Edit
-    const editBookById = (id, newTitle, newAuthor, newDescription, newYear) => {
-
-        const bookData = {
-            Id: id,
-            Title: newTitle,
-            Author: newAuthor,
-            Description: newDescription,
-            Year: newYear
-        };
-
-        agent.Library.update(bookData).then((book) => {
-            setBooks([...books.filter(x => x.id !== book.id), book]);
-        })
-    };
-
     // Delete
     const deleteBookById = (book) => {
 
@@ -76,32 +69,34 @@ function Library({ userRole }) {
     return (
         <Container>          
             <div className='available-books-list-container col-md-9'>
-                <Typography variant="h4" className='book-list-text'>Browse our Collection</Typography>
-                {userRole === 'librarian' &&
-                    <div className="add-book-container">
-                        <Button variant="contained" onClick={() => setOpenCreateModal(true)}>
-                            Add a new book
-                        </Button>
-                        <Dialog open={openCreateModal} onClose={() => setOpenCreateModal(false)}>
-                            <BookCreate onCreate={createBook} onCloseModal={() => setOpenCreateModal(false)} />
-                        </Dialog>
-                    </div>
-                }
+                <Typography variant="h4" className='book-list-text'>
+                    {userData.role === 'librarian' ? 'Current Collection' : 'Browse our Collection'}
+                </Typography>                    
                 <hr />
                 {books.length === 0 &&
                     <Typography variant="h6" className='book-count-text'>
                         There are no books in this library
                     </Typography>
                 }
+                {userData.role === 'librarian' &&
+                    <div className="add-book-container">
+                        <Button variant="outlined" onClick={() => setOpenCreateModal(true)}>
+                            Add a new book
+                        </Button>
+                        <Dialog open={openCreateModal} onClose={() => setOpenCreateModal(false)}>
+                            <BookCreate onCreate={createEditBook} onCloseModal={() => setOpenCreateModal(false)} />
+                        </Dialog>
+                    </div>
+                }
                 <BookList
-                    books={userRole === 'user' ? availableBooks : books}
+                    books={userData.role === 'user' ? availableBooks : books}
                     onDelete={deleteBookById}
-                    onEdit={editBookById}
+                    onEdit={createEditBook}
                     onCheck={changeCheckedStatusById}
-                    userRole={userRole}
+                    userData={userData}
                 />
             </div>
-            {userRole === 'user' &&
+            {userData.role === 'user' &&
                 <div className='my-book-list-container col-md-3'>
                     <Typography variant="h4" className='book-list-text'>My Books</Typography>
                     <hr />

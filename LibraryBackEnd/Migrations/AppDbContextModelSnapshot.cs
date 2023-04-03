@@ -138,7 +138,7 @@ namespace LibraryBackEnd.Migrations
 
                     b.HasIndex("BookCoverId");
 
-                    b.ToTable("Books");
+                    b.ToTable("Books", (string)null);
                 });
 
             modelBuilder.Entity("LibraryBackEnd.Models.Photo", b =>
@@ -152,7 +152,7 @@ namespace LibraryBackEnd.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Photos");
+                    b.ToTable("Photos", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

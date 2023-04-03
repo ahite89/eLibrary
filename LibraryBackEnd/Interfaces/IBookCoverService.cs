@@ -6,7 +6,8 @@ namespace LibraryBackEnd.Interfaces
 {
     public interface IBookCoverService
     {
+        Photo GetBookCoverFromCloudinary(IFormFile file);
         Task<BookCoverUploadResult> AddBookCoverToCloudinary(IFormFile file);
-        Task<BookCover> AddBookCoverEntity(IFormFile file);
+        Task<Photo> AddBookCoverEntity(IFormFile file);
     }
 }

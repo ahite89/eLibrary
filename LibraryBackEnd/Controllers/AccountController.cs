@@ -92,13 +92,19 @@ namespace LibraryBackEnd.Controllers
             return BadRequest(createResult.Errors);
         }
 
-        [Authorize]
-        [HttpGet]
-        public async Task<ActionResult<UserDataObj>> GetCurrentUser()
+        [AllowAnonymous]
+        [HttpPost("current")]
+        public async Task<ActionResult<UserDataObj>> GetCurrentUser(UserDataObj userData)
         {
-            var user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
-
-            return CreateUserObject(user);
+            try
+            {
+                var user = await _userManager.FindByNameAsync(userData.Username);
+                return CreateUserObject(user);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         //public async void Logout()
@@ -111,7 +117,6 @@ namespace LibraryBackEnd.Controllers
             return new UserDataObj
             {
                 DisplayName = user.DisplayName,
-                Image = null,
                 Token = _tokenService.CreateToken(user),
                 Username = user.UserName,
                 Role = user.Role

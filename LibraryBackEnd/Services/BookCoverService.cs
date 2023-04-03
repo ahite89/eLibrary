@@ -3,7 +3,6 @@ using CloudinaryDotNet.Actions;
 using LibraryBackEnd.Data;
 using LibraryBackEnd.Interfaces;
 using LibraryBackEnd.Models;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
 namespace LibraryBackEnd.Services
@@ -12,7 +11,7 @@ namespace LibraryBackEnd.Services
     {
         private readonly Cloudinary _cloudinary;
         private readonly AppDbContext _dbContext;
-        public BookCoverService(IOptions<CloudinarySettings> config, AppDbContext dbContext) 
+        public BookCoverService(IOptions<CloudinarySettings> config, AppDbContext dbContext)
         {
             var account = new Account(
                 config.Value.CloudName,
@@ -23,17 +22,32 @@ namespace LibraryBackEnd.Services
             _dbContext = dbContext;
         }
 
-        public async Task<BookCover> AddBookCoverEntity(IFormFile file)
+        public Photo GetBookCoverFromCloudinary(IFormFile file)
+        {
+            SearchResult result = _cloudinary.Search().Expression("").Execute();
+
+            if (result != null)
+            {
+                return new Photo
+                {
+
+                };
+            }
+
+            return null;
+        }
+
+        public async Task<Photo> AddBookCoverEntity(IFormFile file)
         {
             var bookCoverUploadResult = await AddBookCoverToCloudinary(file);
 
-            var bookCover = new BookCover
+            var bookCover = new Photo
             {
                 Url = bookCoverUploadResult.Url,
                 Id = bookCoverUploadResult.PublicId
             };
 
-            _dbContext.BookCovers.Add(bookCover);
+            _dbContext.Photos.Add(bookCover);
 
             var result = await _dbContext.SaveChangesAsync() > 0;
 
@@ -53,7 +67,7 @@ namespace LibraryBackEnd.Services
                 var uploadParams = new ImageUploadParams
                 {
                     File = new FileDescription(file.FileName, stream),
-                    Transformation = new Transformation().Height(300).Width(150)
+                    Transformation = new Transformation().Width(150)
                 };
 
                 var uploadResult = await _cloudinary.UploadAsync(uploadParams);
