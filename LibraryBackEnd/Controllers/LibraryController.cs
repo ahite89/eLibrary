@@ -6,10 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LibraryBackEnd.Controllers
 {
-    [AllowAnonymous]
     [ApiController]
     [Route("[controller]")]
-    public class LibraryController : ControllerBase
+    public class LibraryController : BaseApiController
     {
         private readonly ILibraryService _libraryService;
         private readonly IBookCoverService _bookCoverService;
