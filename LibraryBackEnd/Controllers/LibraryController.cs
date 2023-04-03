@@ -37,7 +37,7 @@ namespace LibraryBackEnd.Controllers
 
         [HttpPost("create")]
         [Authorize(Roles = "librarian")]
-        public async Task<ActionResult<Book>> AddBook([FromForm] CreateEditBookModel bookData)
+        public async Task<IActionResult> AddBook([FromForm] CreateEditBookModel bookData)
         {
             var user = await _userManager.FindByNameAsync(bookData.Username);
 
@@ -62,14 +62,7 @@ namespace LibraryBackEnd.Controllers
                 BookCoverUrl = bookCover == null ? null : bookCover.Url
             };
 
-            Book dbBook = await _libraryService.AddBookAsync(newBook);
-
-            if (dbBook == null)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"{newBook.Title} could not be added");
-            }
-
-            return dbBook;
+            return HandleResult(await _libraryService.AddBookAsync(newBook));           
         }
 
         [HttpPost("edit")]

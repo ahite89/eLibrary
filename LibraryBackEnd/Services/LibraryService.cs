@@ -27,13 +27,15 @@ namespace LibraryBackEnd.Services
             }
         }
 
-        public async Task<Book> AddBookAsync(Book book)
+        public async Task<Result<Book>> AddBookAsync(Book book)
         {
             try
             {
                 await _dbContext.Books.AddAsync(book);
                 await _dbContext.SaveChangesAsync();
-                return await _dbContext.Books.FindAsync(book.Id);
+                var dbBook = await _dbContext.Books.FindAsync(book.Id);
+
+                return Result<Book>.Success(dbBook);
             }
             catch (Exception ex)
             {
