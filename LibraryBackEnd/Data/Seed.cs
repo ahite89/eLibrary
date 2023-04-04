@@ -12,10 +12,10 @@ namespace LibraryBackEnd.Data
             {
                 var users = new List<AppUser>
                 {
-                    new AppUser {DisplayName = "John Johnson", UserName = "jjohnson01", Email = "jj@gmail.com"},
-                    new AppUser {DisplayName = "Peter Peterson", UserName = "ppeterson01", Email = "pp@gmail.com"},
-                    new AppUser {DisplayName = "Allison Smith", UserName = "asmith01", Email = "as@yahoo.com"},
-                    new AppUser {DisplayName = "Vanessa Jones", UserName = "vjones01", Email = "vj@hotmail.com"}
+                    new AppUser {UserName = "jjohnson01", Email = "jj@gmail.com"},
+                    new AppUser {UserName = "ppeterson01", Email = "pp@gmail.com"},
+                    new AppUser {UserName = "asmith01", Email = "as@yahoo.com"},
+                    new AppUser {UserName = "vjones01", Email = "vj@hotmail.com"}
                 };
 
                 foreach (var user in users)

@@ -23,16 +23,9 @@ namespace LibraryBackEnd.Controllers
 
         [HttpGet]
         [Authorize(Roles = "user, librarian")]
-        public async Task<ActionResult<List<Book>>> GetAllBooks()
+        public async Task<IActionResult> GetAllBooks()
         {
-            List<Book> books = await _libraryService.GetAllBooksAsync();
-
-            if (books == null)
-            {
-                return StatusCode(StatusCodes.Status204NoContent, "No books found");
-            }
-
-            return books;
+            return HandleResult(await _libraryService.GetAllBooksAsync());
         }
 
         [HttpPost("create")]
@@ -62,7 +55,7 @@ namespace LibraryBackEnd.Controllers
                 BookCoverUrl = bookCover == null ? null : bookCover.Url
             };
 
-            return HandleResult(await _libraryService.AddBookAsync(newBook));           
+            return HandleResult(await _libraryService.AddBookAsync(newBook));
         }
 
         [HttpPost("edit")]
@@ -83,14 +76,7 @@ namespace LibraryBackEnd.Controllers
                 bookCover = _bookCoverService.GetBookCoverFromCloudinary(bookData.BookCoverFile);
             }
 
-            Book dbBook = await _libraryService.EditBookAsync(bookData);
-
-            if (dbBook == null)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"{bookData.Title} could not be edited");
-            }
-
-            return dbBook;
+            return HandleResult(await _libraryService.EditBookAsync(bookData));
         }
 
         [HttpPost("checkout")]
@@ -104,42 +90,21 @@ namespace LibraryBackEnd.Controllers
 
             if (user == null) return Unauthorized();
 
-            Book dbBook = await _libraryService.CheckInOutBookAsync(book, true, user.Id);
-
-            if (dbBook == null)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"{book.Title} could not be checked out");
-            }
-
-            return dbBook;
+            return HandleResult(await _libraryService.CheckInOutBookAsync(book, true, user.Id));            
         }
 
         [HttpPost("checkin")]
         [Authorize(Roles = "librarian")]
         public async Task<ActionResult<Book>> CheckinBook(Book book)
         {
-            Book dbBook = await _libraryService.CheckInOutBookAsync(book, false);
-
-            if (dbBook == null)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"{book.Title} could not be checked in");
-            }
-
-            return dbBook;
+            return HandleResult(await _libraryService.CheckInOutBookAsync(book, false));
         }
 
         [HttpPost("delete")]
         [Authorize(Roles = "librarian")]
         public async Task<ActionResult<Book>> DeleteBook(Book book)
         {
-            (bool status, string message) = await _libraryService.DeleteBookAsync(book);
-
-            if (status == false)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, message);
-            }
-
-            return book;
+            return HandleResult(await _libraryService.DeleteBookAsync(book));
         }
     }
 }

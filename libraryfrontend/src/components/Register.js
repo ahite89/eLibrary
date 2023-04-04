@@ -12,17 +12,15 @@ function Register({ onLogin }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
-    const [displayName, setDisplayName] = useState('');
 
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        let role = event.target.select.value;
+        const role = event.target.select.value;
 
         const registerData = {
             Email: email,
             Password: password,
-            DisplayName: displayName,
             Username: username,
             Role: role
         };
@@ -55,14 +53,7 @@ function Register({ onLogin }) {
                     variant="outlined"
                     value={username}
                     onChange={(event) => setUsername(event.target.value)}
-                />
-                <TextField
-                    required
-                    label='Display Name'
-                    variant="outlined"
-                    value={displayName}
-                    onChange={(event) => setDisplayName(event.target.value)}
-                />
+                />               
                 <TextField required label="Role" name="select" select>
                     <MenuItem value="librarian">Librarian</MenuItem>
                     <MenuItem value="user">User</MenuItem>

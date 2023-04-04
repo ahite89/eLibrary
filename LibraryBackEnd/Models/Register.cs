@@ -13,9 +13,6 @@ namespace LibraryBackEnd.Models
         public string Password { get; set; }
 
         [Required]
-        public string DisplayName { get; set; }
-
-        [Required]
         public string Username { get; set; }
 
         [Required]

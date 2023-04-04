@@ -15,15 +15,16 @@ namespace LibraryBackEnd.Services
             _dbContext = dbContext;
         }
 
-        public async Task<List<Book>> GetAllBooksAsync()
+        public async Task<Result<List<Book>>> GetAllBooksAsync()
         {
             try
             {
-                return await _dbContext.Books.ToListAsync();
+                var books = await _dbContext.Books.ToListAsync();
+                return Result<List<Book>>.Success(books);
             }
-            catch
+            catch (Exception ex)
             {
-                return new List<Book>();
+                return Result<List<Book>>.Failure(ex.Message);
             }
         }
 
@@ -39,11 +40,11 @@ namespace LibraryBackEnd.Services
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                return Result<Book>.Failure(ex.Message);
             }
         }
 
-        public async Task<Book> EditBookAsync(CreateEditBookModel bookData)
+        public async Task<Result<Book>> EditBookAsync(CreateEditBookModel bookData)
         {
             try
             {
@@ -55,21 +56,20 @@ namespace LibraryBackEnd.Services
                     dbBook.Author = bookData.Author;
                     dbBook.Description = bookData.Description;
                     dbBook.Year = bookData.Year;
+                    
                     _dbContext.Entry(dbBook).State = EntityState.Modified;
                     await _dbContext.SaveChangesAsync();
-
-                    return dbBook;
                 }
 
-                return null;
+                return Result<Book>.Success(dbBook);
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                return Result<Book>.Failure(ex.Message);
             }
         }
 
-        public async Task<Book> CheckInOutBookAsync(Book book, bool checkingOut, string userId)
+        public async Task<Result<Book>> CheckInOutBookAsync(Book book, bool checkingOut, string userId)
         {
             try
             {
@@ -90,37 +90,33 @@ namespace LibraryBackEnd.Services
 
                     _dbContext.Entry(dbBook).State = EntityState.Modified;
                     await _dbContext.SaveChangesAsync();
-
-                    return dbBook;
                 }
 
-                return null;
+                return Result<Book>.Success(dbBook);
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                return Result<Book>.Failure(ex.Message);
             }
         }
 
-        public async Task<(bool, string)> DeleteBookAsync(Book book)
+        public async Task<Result<Book>> DeleteBookAsync(Book book)
         {
             try
             {
                 var dbBook = await _dbContext.Books.FindAsync(book.Id);
-                
-                if (dbBook == null)
+
+                if (dbBook != null)
                 {
-                    return (false, "This book could not be found");
+                    _dbContext.Books.Remove(dbBook);
+                    await _dbContext.SaveChangesAsync();
                 }
 
-                _dbContext.Books.Remove(dbBook);
-                await _dbContext.SaveChangesAsync();
-
-                return (true, "This book has been removed from the library");
+                return Result<Book>.Success(dbBook);
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                return Result<Book>.Failure(ex.Message);
             }
         }
     }

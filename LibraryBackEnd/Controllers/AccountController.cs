@@ -67,10 +67,10 @@ namespace LibraryBackEnd.Controllers
 
             var user = new AppUser
             {
-                DisplayName = registerData.DisplayName,
                 Email = registerData.Email,
                 UserName = registerData.Username,
-                Role = registerData.Role
+                Role = registerData.Role,
+                DateAdded = DateTime.Now
             };
 
             if (!await _roleManager.RoleExistsAsync(user.Role))
@@ -116,7 +116,6 @@ namespace LibraryBackEnd.Controllers
         {
             return new UserDataObj
             {
-                DisplayName = user.DisplayName,
                 Token = _tokenService.CreateToken(user),
                 Username = user.UserName,
                 Role = user.Role
