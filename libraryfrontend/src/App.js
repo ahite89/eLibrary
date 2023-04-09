@@ -12,19 +12,19 @@ function App() {
 
     // Login, Register, Role
     const [loggedIn, setLoggedIn] = useState(false);
-    const [userData, setUserData] = useState([]);               // change to set user data
+    const [userData, setUserData] = useState([]);
     const [hasAccount, setHasAccount] = useState(true);
 
     // Get current user via local storage
     useEffect(() => {
-        const userData = localStorage.getItem("userData");
+        const userData = hasAccount;
         if (userData !== null) {
             agent.Account.current(JSON.parse(userData)).then(userData => {
                 if (userData !== null) {
                     setLoggedIn(true);
                     setUserData(userData);
                 }
-            })
+            }).catch(error => console.log(error.response))
         }
     }, []);
 

@@ -15,6 +15,7 @@ namespace LibraryBackEnd.Services
             _dbContext = dbContext;
         }
 
+        // ADD LOGGING
         public async Task<Result<List<Book>>> GetAllBooksAsync()
         {
             try

@@ -9,29 +9,30 @@ const requests = {
     post: (url, body) => axios.post(url, body).then(responseBody)
 }
 
+const bookFormData = (book, file, username = "") => {
+    let bookData = new FormData();
+    if (book.Id !== null) {
+        bookData.append('Id', book.Id);
+    }
+    bookData.append('Title', book.Title);
+    bookData.append('Author', book.Author);
+    bookData.append('Description', book.Description);
+    bookData.append('Year', book.Year);
+    bookData.append('BookCoverFile', file);
+    bookData.append('Username', username);
+
+    return bookData;
+}
+
 const Library = {
     list: () => requests.get('/library'),
     create: (book, file, username) => {
-        let bookData = new FormData();
-        bookData.append('Title', book.Title);
-        bookData.append('Author', book.Author);
-        bookData.append('Description', book.Description);
-        bookData.append('Year', book.Year);
-        bookData.append('BookCoverFile', file);
-        bookData.append('Username', username);
-        return requests.post('/library/create', bookData, {
+        return requests.post('/library/create', bookFormData(book, file, username), {
             headers: {'content-type': 'multipart/form-data'}
         })
     },
     update: (book, file) => {
-        let bookData = new FormData();
-        bookData.append('Id', book.Id);
-        bookData.append('Title', book.Title);
-        bookData.append('Author', book.Author);
-        bookData.append('Description', book.Description);
-        bookData.append('Year', book.Year);
-        bookData.append('BookCoverFile', file);
-        return requests.post('/library/edit', bookData, {
+        return requests.post('/library/edit', bookFormData(book, file), {
             headers: { 'content-type': 'multipart/form-data' }
         })
     },
